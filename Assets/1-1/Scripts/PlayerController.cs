@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     bool m_wallJump;
     float m_vertical;
     float gravity;
+    float m_grabTimer;
+    float m_grabAnim;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
         m_animator = GetComponent<Animator>();
         m_grabObject = transform.Find("Grab").gameObject;
         gravity = m_playerRb.gravityScale;
+        m_grabAnim = 1;
     }
 
     // Update is called once per frame
@@ -65,6 +68,7 @@ public class PlayerController : MonoBehaviour
         if (m_isGround && Input.GetButtonDown("Jump"))
         {
             m_playerRb.AddForce(Vector2.up * m_jumpPower, ForceMode2D.Impulse);
+            m_animator.Play("Jump");
         }
 
         //•Ç’Í‚Ý
@@ -75,6 +79,16 @@ public class PlayerController : MonoBehaviour
             var grab = m_grabObject.GetComponent<GrabController>();
             if (grab.isGrab())
             {
+                if (!(m_vertical == 0))
+                {
+                    m_grabTimer += Time.deltaTime;
+                    if (m_grabTimer > 0.2)
+                    {
+                        m_grabAnim *= -1;
+                        m_animator.SetFloat("GrabAnim", m_grabAnim);
+                        m_grabTimer = 0;
+                    }
+                }
                 //float x = m_playerRb.velocity.x;
                 m_playerRb.velocity = new Vector2(0, m_vertical * m_grabSpeed);
                 m_playerRb.gravityScale = 0;
@@ -86,6 +100,7 @@ public class PlayerController : MonoBehaviour
                     transform.localScale = m_scale;
                     m_wallJump = true;
                 }
+                m_animator.SetBool("Grab", true);
             }
             else
             {
@@ -95,14 +110,17 @@ public class PlayerController : MonoBehaviour
                     if (transform.localScale.x > 0) { x = 1; }
                     else { x = -1; }
                     m_playerRb.AddForce(new Vector2(x, 1).normalized * m_jumpPower, ForceMode2D.Impulse);
+                    m_animator.Play("Jump");
                     m_wallJump = false;
                 }
                 m_playerRb.gravityScale = gravity;
+                m_animator.SetBool("Grab", false);
             }
         }
         else
         {
             m_playerRb.gravityScale = gravity;
+            m_animator.SetBool("Grab", false);
         }
 
         //ƒ_ƒbƒVƒ…
