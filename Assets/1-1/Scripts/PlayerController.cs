@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float m_grabSpeed = 3f;
 
     Rigidbody2D m_playerRb;
+    Animator m_animator;
     //移動、反転
     Vector2 m_scale;
     float m_lscaleX;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_playerRb = GetComponent<Rigidbody2D>();
+        m_animator = GetComponent<Animator>();
         m_grabObject = transform.Find("Grab").gameObject;
         gravity = m_playerRb.gravityScale;
     }
@@ -37,7 +39,7 @@ public class PlayerController : MonoBehaviour
         m_horizontal = Input.GetAxisRaw("Horizontal");
         m_vertical = Input.GetAxisRaw("Vertical");
         //左右移動
-        m_playerRb.AddForce(Vector2.right * m_horizontal * m_moveSpeed , ForceMode2D.Force);
+        m_playerRb.AddForce(Vector2.right * m_horizontal * m_moveSpeed, ForceMode2D.Force);
         //maxSpeed以上出ないように
         if (m_playerRb.velocity.x > m_maxSpeed)
         {
@@ -66,8 +68,8 @@ public class PlayerController : MonoBehaviour
         }
 
         //壁掴み
-        if (Input.GetButtonDown("Fire1")) {m_isPushGrab = true;}
-        if (Input.GetButtonUp("Fire1")) {m_isPushGrab = false;}
+        if (Input.GetButtonDown("Fire1")) { m_isPushGrab = true; }
+        if (Input.GetButtonUp("Fire1")) { m_isPushGrab = false; }
         if (m_isPushGrab)
         {
             var grab = m_grabObject.GetComponent<GrabController>();
@@ -102,9 +104,34 @@ public class PlayerController : MonoBehaviour
         {
             m_playerRb.gravityScale = gravity;
         }
+
+        //ダッシュ
+        if (Input.GetButtonDown("Dash"))
+        {
+            Dash();
+        }
+
+        //アニメーター
+        if (m_isGround)
+        {
+            m_animator.SetBool("Idle", true);
+            if (!(m_playerRb.velocity.x == 0))
+            {
+                m_animator.SetBool("Run", true);
+            }
+            else
+            {
+                m_animator.SetBool("Run", false);
+            }
+        }
+        else
+        {
+            m_animator.SetBool("Run", false);
+            m_animator.SetBool("Idle", false);
+        }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+        private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
@@ -114,6 +141,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        m_isGround = false;
+        if (collision.gameObject.tag == "Ground")
+        {
+            m_isGround = false;
+        }
+    }
+
+    void Dash()
+    {
+        Debug.Log("dash");
     }
 }
