@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -31,7 +32,6 @@ public class PlayerController : MonoBehaviour
     {
         m_playerRb = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
-        m_grabObject = transform.Find("Grab").gameObject;
         gravity = m_playerRb.gravityScale;
         m_grabAnim = 1;
     }
@@ -41,8 +41,6 @@ public class PlayerController : MonoBehaviour
     {
         m_horizontal = Input.GetAxisRaw("Horizontal");
         m_vertical = Input.GetAxisRaw("Vertical");
-        //左右移動
-        m_playerRb.AddForce(Vector2.right * m_horizontal * m_moveSpeed, ForceMode2D.Force);
         //maxSpeed以上出ないように
         if (m_playerRb.velocity.x > m_maxSpeed)
         {
@@ -72,15 +70,18 @@ public class PlayerController : MonoBehaviour
         }
 
         //壁掴み
-        if (Input.GetButtonDown("Fire1")) { m_isPushGrab = true; }
-        if (Input.GetButtonUp("Fire1")) { m_isPushGrab = false; }
-        if (m_isPushGrab)
+        //判定をlinecastする
+        Vector2 start = this.transform.position;
+        Vector2 lineForGrab = new Vector2(transform.localScale.x, -0.6f);
+        Debug.DrawLine(start, start + lineForGrab, Color.red);
+        RaycastHit2D hit = Physics2D.Linecast(start, start + lineForGrab);
+        if (Input.GetButton("Fire1") && hit.collider)
         {
-            var grab = m_grabObject.GetComponent<GrabController>();
-            if (grab.isGrab())
+            if (hit.collider.gameObject.tag == "CanGrabWall")
             {
                 if (!(m_vertical == 0))
                 {
+                    //上下しているときアニメーションを動かす
                     m_grabTimer += Time.deltaTime;
                     if (m_grabTimer > 0.2)
                     {
@@ -89,11 +90,11 @@ public class PlayerController : MonoBehaviour
                         m_grabTimer = 0;
                     }
                 }
-                //float x = m_playerRb.velocity.x;
                 m_playerRb.velocity = new Vector2(0, m_vertical * m_grabSpeed);
                 m_playerRb.gravityScale = 0;
                 if (Input.GetButtonDown("Jump"))
                 {
+                    //壁掴み中にJumpした場合、反転させ、ジャンプ
                     m_lscaleX = transform.localScale.x;
                     m_lscaleX *= -1;
                     m_scale = new Vector2(m_lscaleX, transform.localScale.y);
@@ -104,21 +105,21 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if (m_wallJump)
-                {
-                    float x;
-                    if (transform.localScale.x > 0) { x = 1; }
-                    else { x = -1; }
-                    m_playerRb.AddForce(new Vector2(x, 1).normalized * m_jumpPower, ForceMode2D.Impulse);
-                    m_animator.Play("Jump");
-                    m_wallJump = false;
-                }
                 m_playerRb.gravityScale = gravity;
                 m_animator.SetBool("Grab", false);
             }
         }
         else
         {
+            if (m_wallJump)
+            {
+                float x;
+                if (transform.localScale.x > 0) { x = 1; }
+                else { x = -1; }
+                m_playerRb.AddForce(new Vector2(x, 1).normalized * m_jumpPower, ForceMode2D.Impulse);
+                m_animator.Play("Jump");
+                m_wallJump = false;
+            }
             m_playerRb.gravityScale = gravity;
             m_animator.SetBool("Grab", false);
         }
@@ -149,7 +150,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+    private void FixedUpdate()
+    {
+        //左右移動
+        m_playerRb.AddForce(Vector2.right * m_horizontal * m_moveSpeed, ForceMode2D.Force);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
