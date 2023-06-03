@@ -559,6 +559,7 @@ MonoBehaviour:
   m_grabSpeed: 5
   m_dashSpeed: 80
   m_dashTime: 0.06
+  m_blurObject: {fileID: 3513158902430444010, guid: a6db76e8d3023f449bd11773277c87e2, type: 3}
 --- !u!58 &509693100
 CircleCollider2D:
   m_ObjectHideFlags: 0

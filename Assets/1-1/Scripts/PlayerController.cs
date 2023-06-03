@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float m_grabSpeed = 3f;
     [SerializeField] float m_dashSpeed = 100f;
     [SerializeField] float m_dashTime = 0.1f;
+    [SerializeField] GameObject m_blurObject;
 
     Rigidbody2D m_playerRb;
     Animator m_animator;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     Vector2 m_direction;
     bool m_dashTimerIsStart;
     float dashtimer = 0;
+    int x = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -137,16 +139,22 @@ public class PlayerController : MonoBehaviour
         }
         if (m_dashTimerIsStart)
         {
+            if (dashtimer > m_dashTime / 6 * x) {
+                GameObject blur = Instantiate(m_blurObject); blur.transform.position = transform.position; x++;
+            }
             m_isCanDash = false;
             m_playerRb.velocity = m_direction * m_dashSpeed;
+            //if (m_direction.y > 0) { m_playerRb.velocity = m_direction * m_dashSpeed * 0.8f; }
             dashtimer += Time.deltaTime;
             if (dashtimer > m_dashTime)
             {
+                m_playerRb.velocity = m_direction * 16;
                 dashtimer = 0f;
                 m_dashTimerIsStart = false;
+                x = 1;
             }
         }
-
+        
         //アニメーター
         if (m_isGround)
         {
