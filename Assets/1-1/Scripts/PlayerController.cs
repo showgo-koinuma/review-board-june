@@ -136,13 +136,14 @@ public class PlayerController : MonoBehaviour
             {
                 m_direction = Vector2.up;
             }
+            m_isCanDash = false;
         }
         if (m_dashTimerIsStart)
         {
             if (dashtimer > m_dashTime / 6 * x) {
                 GameObject blur = Instantiate(m_blurObject); blur.transform.position = transform.position; x++;
             }
-            m_isCanDash = false;
+            //m_isCanDash = false;
             m_playerRb.velocity = m_direction * m_dashSpeed;
             //if (m_direction.y > 0) { m_playerRb.velocity = m_direction * m_dashSpeed * 0.8f; }
             dashtimer += Time.deltaTime;
@@ -152,6 +153,7 @@ public class PlayerController : MonoBehaviour
                 dashtimer = 0f;
                 m_dashTimerIsStart = false;
                 x = 1;
+                GameObject blur = Instantiate(m_blurObject); blur.transform.position = transform.position;
             }
         }
         
@@ -200,6 +202,11 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnTriggerStay2D(Collider2D collision)
+    {
+        m_isCanDash = true;
+    }
+
+    public void CanDash()
     {
         m_isCanDash = true;
     }
