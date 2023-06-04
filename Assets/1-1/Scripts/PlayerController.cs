@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody2D m_playerRb;
     Animator m_animator;
+    bool m_isLive = true;
     //à⁄ìÆÅAîΩì]
     Vector2 m_scale;
     float m_lscaleX;
@@ -209,5 +210,9 @@ public class PlayerController : MonoBehaviour
     public void CanDash()
     {
         m_isCanDash = true;
+    }
+    public void IsDead()
+    {
+        m_isLive = false;
     }
 }
