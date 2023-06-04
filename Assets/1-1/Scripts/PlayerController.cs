@@ -13,10 +13,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float m_dashSpeed = 100f;
     [SerializeField] float m_dashTime = 0.1f;
     [SerializeField] GameObject m_blurObject;
+    [SerializeField] GameObject m_respawnButton;
 
     Rigidbody2D m_playerRb;
+    SpriteRenderer m_playerSR;
     Animator m_animator;
-    bool m_isLive = true;
+    bool m_isAlive = true;
+    public Vector3 m_respawnPosition;
     //à⁄ìÆÅAîΩì]
     Vector2 m_scale;
     float m_lscaleX;
@@ -39,7 +42,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_playerRb = GetComponent<Rigidbody2D>();
+        m_playerSR = GetComponent<SpriteRenderer>();
         m_animator = GetComponent<Animator>();
+        m_respawnPosition = transform.position;
         gravity = m_playerRb.gravityScale;
         m_grabAnim = 1;
     }
@@ -47,7 +52,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_horizontal = Input.GetAxisRaw("Horizontal");
+        if (!m_isAlive) 
+        {
+            Time.timeScale = 0;
+            m_playerSR.color = new Color(0, 1, 1, 1);
+            m_respawnButton.SetActive(true);
+        }
+        if (m_isAlive)
+        {
+            m_horizontal = Input.GetAxisRaw("Horizontal");
+        }
         m_vertical = Input.GetAxisRaw("Vertical");
         //maxSpeedà»è„èoÇ»Ç¢ÇÊÇ§Ç…
         if (Math.Pow(m_playerRb.velocity.x, 2) > Math.Pow(m_maxSpeed, 2))
@@ -213,6 +227,14 @@ public class PlayerController : MonoBehaviour
     }
     public void IsDead()
     {
-        m_isLive = false;
+        m_isAlive = false;
+    }
+    public void Respawn()
+    {
+        Time.timeScale = 1;
+        m_isAlive = true;
+        transform.position = m_respawnPosition;
+        m_playerSR.color = new Color(1, 1, 1, 1);
+        m_respawnButton.SetActive(false);
     }
 }
