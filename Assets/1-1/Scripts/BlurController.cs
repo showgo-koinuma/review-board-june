@@ -23,7 +23,6 @@ public class BlurController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(m_blurSprite.color.a);
         timer += Time.deltaTime;
         colorA = Time.deltaTime / outTime;
         m_blurSprite.color -= new Color(0, 0, 0, colorA);

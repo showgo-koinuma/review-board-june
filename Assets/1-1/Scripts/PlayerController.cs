@@ -13,13 +13,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float m_dashSpeed = 100f;
     [SerializeField] float m_dashTime = 0.1f;
     [SerializeField] GameObject m_blurObject;
-    [SerializeField] GameObject m_respawnButton;
 
     Rigidbody2D m_playerRb;
     SpriteRenderer m_playerSR;
     Animator m_animator;
     bool m_isAlive = true;
+    public Vector3 m_startPoint;
     public Vector3 m_respawnPosition;
+    public bool calledGameOver;
     //à⁄ìÆÅAîΩì]
     Vector2 m_scale;
     float m_lscaleX;
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
         m_playerRb = GetComponent<Rigidbody2D>();
         m_playerSR = GetComponent<SpriteRenderer>();
         m_animator = GetComponent<Animator>();
+        m_startPoint = transform.position;
         m_respawnPosition = transform.position;
         gravity = m_playerRb.gravityScale;
         m_grabAnim = 1;
@@ -52,13 +54,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!m_isAlive) 
+        if (!m_isAlive && !calledGameOver) 
         {
-            Time.timeScale = 0;
-            m_playerSR.color = new Color(0, 1, 1, 1);
-            m_respawnButton.SetActive(true);
+            StartCoroutine(GameObject.Find("GameController").GetComponent<GameController>().GameOver());
+            calledGameOver = true;
         }
-        if (m_isAlive)
+        if (Time.timeScale == 1)
         {
             m_horizontal = Input.GetAxisRaw("Horizontal");
         }
@@ -228,6 +229,11 @@ public class PlayerController : MonoBehaviour
     public void IsDead()
     {
         m_isAlive = false;
+        calledGameOver = false;
+    }
+    public void IsAlive()
+    {
+        m_isAlive = true;
     }
     public void Respawn()
     {
@@ -235,6 +241,5 @@ public class PlayerController : MonoBehaviour
         m_isAlive = true;
         transform.position = m_respawnPosition;
         m_playerSR.color = new Color(1, 1, 1, 1);
-        m_respawnButton.SetActive(false);
     }
 }
