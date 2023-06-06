@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -62,13 +63,6 @@ public class GameController : MonoBehaviour
     public void FromTheBeginning()
     {
         Time.timeScale = 1;
-        m_pauseText.SetActive(false);
-        m_gameOverText.SetActive(false);
-        m_continueButton.SetActive(false);
-        m_respawnButton.SetActive(false);
-        m_fromTheBeginningButton.SetActive(false);
-        m_player.transform.position = m_player.GetComponent<PlayerController>().m_startPoint;
-        m_player.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-        m_player.GetComponent<PlayerController>().IsAlive();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
