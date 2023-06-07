@@ -34,11 +34,10 @@ public class GameController : MonoBehaviour
     {
         Time.timeScale = 0;
         m_player.GetComponent<SpriteRenderer>().color = new Color(0, 1, 1, 1);
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.5f);
         m_gameOverText.SetActive(true);
         m_respawnButton.SetActive(true);
         m_fromTheBeginningButton.SetActive(true);
-        Debug.Log("‚Ü‚¾‚¢‚é‚æ");
     }
     public void Continue()
     {

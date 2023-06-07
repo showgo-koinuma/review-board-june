@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
         m_playerRb.AddForce(Vector2.right * m_horizontal * m_moveSpeed, ForceMode2D.Force);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
@@ -208,7 +208,7 @@ public class PlayerController : MonoBehaviour
         //m_isGround = true;
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
@@ -219,7 +219,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        m_isCanDash = true;
+        if (collision.gameObject.tag == "Ground")
+        {
+            m_isCanDash = true;
+        }
     }
 
     public void CanDash()
