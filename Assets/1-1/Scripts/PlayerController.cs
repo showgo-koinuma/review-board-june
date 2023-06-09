@@ -205,6 +205,10 @@ public class PlayerController : MonoBehaviour
         {
             m_isGround = true;
         }
+        if (collision.gameObject.GetComponent<FallBlockController>() != null)
+        {
+            transform.SetParent(collision.transform);
+        }
         //m_isGround = true;
     }
 
@@ -213,6 +217,10 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             m_isGround = false;
+        }
+        if (collision.gameObject.GetComponent<FallBlockController>() != null)
+        {
+            transform.SetParent(null);
         }
         //m_isGround = false;
     }
