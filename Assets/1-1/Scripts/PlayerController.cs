@@ -60,12 +60,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!m_isAlive && !calledGameOver) 
+        if (!m_isAlive && !calledGameOver)
         {
+            m_audioSource[1].Stop();
             StartCoroutine(GameObject.Find("GameController").GetComponent<GameController>().GameOver());
             calledGameOver = true;
             m_audioSource[0].PlayOneShot(m_gameOverSound);
-            m_audioSource[1].Stop();
         }
         if (Time.timeScale == 1)
         {
