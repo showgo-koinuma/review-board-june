@@ -17,10 +17,15 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D m_playerRb;
     SpriteRenderer m_playerSR;
     Animator m_animator;
+    AudioSource[] m_audioSource;
     bool m_isAlive = true;
     public Vector3 m_startPoint;
     public Vector3 m_respawnPosition;
     public bool calledGameOver;
+    //[SerializeField] AudioClip m_runSound;
+    [SerializeField] AudioClip m_jumpSound;
+    [SerializeField] AudioClip m_dashSound;
+    [SerializeField] AudioClip m_gameOverSound;
     //à⁄ìÆÅAîΩì]
     Vector2 m_scale;
     float m_lscaleX;
@@ -45,6 +50,7 @@ public class PlayerController : MonoBehaviour
         m_playerRb = GetComponent<Rigidbody2D>();
         m_playerSR = GetComponent<SpriteRenderer>();
         m_animator = GetComponent<Animator>();
+        m_audioSource = GetComponents<AudioSource>();
         m_startPoint = transform.position;
         m_respawnPosition = transform.position;
         gravity = m_playerRb.gravityScale;
@@ -58,6 +64,8 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(GameObject.Find("GameController").GetComponent<GameController>().GameOver());
             calledGameOver = true;
+            m_audioSource[0].PlayOneShot(m_gameOverSound);
+            m_audioSource[1].Stop();
         }
         if (Time.timeScale == 1)
         {
@@ -91,6 +99,7 @@ public class PlayerController : MonoBehaviour
         {
             m_playerRb.AddForce(Vector2.up * m_jumpPower, ForceMode2D.Impulse);
             m_animator.Play("Jump");
+            m_audioSource[0].PlayOneShot(m_jumpSound);
         }
 
         //ï«íÕÇ›
@@ -128,6 +137,7 @@ public class PlayerController : MonoBehaviour
                     else { x = -1; }
                     m_playerRb.AddForce(new Vector2(x, 1).normalized * m_jumpPower, ForceMode2D.Impulse);
                     m_animator.Play("Jump");
+                    m_audioSource[0].PlayOneShot(m_jumpSound);
                 }
                 m_animator.SetBool("Grab", true);
             }
@@ -153,6 +163,7 @@ public class PlayerController : MonoBehaviour
                 m_direction = Vector2.up;
             }
             m_isCanDash = false;
+            m_audioSource[0].PlayOneShot(m_dashSound);
         }
         if (m_dashTimerIsStart)
         {
@@ -180,16 +191,22 @@ public class PlayerController : MonoBehaviour
             if (!(m_playerRb.velocity.x == 0))
             {
                 m_animator.SetBool("Run", true);
+                if (!m_audioSource[1].isPlaying) 
+                {
+                    m_audioSource[1].Play();
+                }
             }
             else
             {
                 m_animator.SetBool("Run", false);
+                m_audioSource[1].Stop();
             }
         }
         else
         {
             m_animator.SetBool("Run", false);
             m_animator.SetBool("Idle", false);
+            m_audioSource[1].Stop();
         }
     }
 
