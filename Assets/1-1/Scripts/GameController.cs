@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
     float m_gameTimer;
     float m_clearTime;
     float m_clearTimer;
+    int m_deathCount = 0;
     private void Start()
     {
         m_player = GameObject.Find("Player");
@@ -59,7 +61,11 @@ public class GameController : MonoBehaviour
             {
                 m_clearText.SetActive(true);
                 m_clearTimeText.SetActive(true);
+                int min = (int)m_clearTime / 60;
+                int sec = (int)m_clearTime % 60;
+                m_clearTimeText.GetComponent<Text>().text = $"クリアタイム　{min}分{sec}秒";
                 m_deathCountText.SetActive(true);
+                m_deathCountText.GetComponent<Text>().text = $"死んだ回数　{m_deathCount}回";
                 m_fromTheBeginningButton.SetActive(true);
             }
         }
@@ -67,6 +73,7 @@ public class GameController : MonoBehaviour
     public IEnumerator GameOver()
     {
         Time.timeScale = 0;
+        m_deathCount++;
         m_player.GetComponent<SpriteRenderer>().color = new Color(0, 1, 1, 1);
         yield return new WaitForSecondsRealtime(0.5f);
         m_gameOverText.SetActive(true);
@@ -96,7 +103,7 @@ public class GameController : MonoBehaviour
     public void FromTheBeginning()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("Title Scene");
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

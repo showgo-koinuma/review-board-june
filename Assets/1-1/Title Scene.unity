@@ -1205,7 +1205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6817434100412553750, guid: 5e91ba9e558db3e4c90f662ebd9513c8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6817434100412553750, guid: 5e91ba9e558db3e4c90f662ebd9513c8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1411,8 +1411,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278246911
-  m_fontColor: {r: 1, g: 0.8675798, b: 0, a: 1}
+    rgba: 4278779881
+  m_fontColor: {r: 0.91489387, g: 1, b: 0.032075405, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
