@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     Animator m_animator;
     AudioSource[] m_audioSource;
     bool m_isAlive = true;
+    bool m_isClear;
     public Vector3 m_startPoint;
     public Vector3 m_respawnPosition;
     public bool calledGameOver;
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour
         {
             m_horizontal = Input.GetAxisRaw("Horizontal");
         }
+        if (m_isClear) { m_horizontal = 1; }
         m_vertical = Input.GetAxisRaw("Vertical");
         //maxSpeed以上出ないように
         if (Math.Pow(m_playerRb.velocity.x, 2) > Math.Pow(m_maxSpeed, 2))
@@ -154,7 +156,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //ダッシュ
-        if (Input.GetButtonDown("Dash") && m_isCanDash && m_vertical >= 0)
+        if (Input.GetButtonDown("Dash") && m_isCanDash && m_vertical >= 0 && !m_isClear)
         {
             m_dashTimerIsStart = true;
             m_direction = new Vector2(Math.Sign(transform.localScale.x), m_vertical).normalized;
@@ -262,6 +264,10 @@ public class PlayerController : MonoBehaviour
     public void IsAlive()
     {
         m_isAlive = true;
+    }
+    public void IsClear()
+    {
+        m_isClear = true;
     }
     public void Respawn()
     {
