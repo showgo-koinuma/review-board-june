@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject m_blurObject;
 
     Rigidbody2D m_playerRb;
-    SpriteRenderer m_playerSR;
     Animator m_animator;
     AudioSource[] m_audioSource;
     bool m_isAlive = true;
@@ -49,7 +48,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_playerRb = GetComponent<Rigidbody2D>();
-        m_playerSR = GetComponent<SpriteRenderer>();
         m_animator = GetComponent<Animator>();
         m_audioSource = GetComponents<AudioSource>();
         m_startPoint = transform.position;
@@ -185,6 +183,11 @@ public class PlayerController : MonoBehaviour
                 GameObject blur = Instantiate(m_blurObject); blur.transform.position = transform.position;
             }
         }
+        else
+        {
+            dashtimer = 0f;
+            x = 1;
+        }
         
         //アニメーター
         if (m_isGround)
@@ -269,11 +272,8 @@ public class PlayerController : MonoBehaviour
     {
         m_isClear = true;
     }
-    public void Respawn()
+    public void DashReset()
     {
-        Time.timeScale = 1;
-        m_isAlive = true;
-        transform.position = m_respawnPosition;
-        m_playerSR.color = new Color(1, 1, 1, 1);
+        m_dashTimerIsStart = false;
     }
 }

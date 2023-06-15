@@ -98,6 +98,8 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1;
         m_player.GetComponent<PlayerController>().IsAlive();
         m_player.transform.position = m_player.GetComponent<PlayerController>().m_respawnPosition;
+        m_player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        m_player.GetComponent<PlayerController>().DashReset();
         m_player.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
     }
     public void FromTheBeginning()

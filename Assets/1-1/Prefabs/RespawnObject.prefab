@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_objectToRespawn: {fileID: 0}
-  m_respawnTime: 3
+  m_respawnTime: 2
