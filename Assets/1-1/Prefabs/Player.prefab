@@ -184,7 +184,6 @@ MonoBehaviour:
   m_dashSpeed: 80
   m_dashTime: 0.06
   m_blurObject: {fileID: 3513158902430444010, guid: a6db76e8d3023f449bd11773277c87e2, type: 3}
-  m_playerObject: {fileID: 4444199403965136745}
   m_startPoint: {x: 0, y: 0, z: 0}
   m_respawnPosition: {x: 0, y: 0, z: 0}
   calledGameOver: 0
@@ -203,7 +202,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -299,7 +298,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c79661fca9e9f244090be2c0e6c35339, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
