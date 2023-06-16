@@ -213,6 +213,10 @@ public class PlayerController : MonoBehaviour
             m_animator.SetBool("Idle", false);
             m_audioSource[1].Stop();
         }
+        if (Time.timeScale == 0)
+        {
+            m_audioSource[1].Stop();
+        }
     }
 
     private void FixedUpdate()
