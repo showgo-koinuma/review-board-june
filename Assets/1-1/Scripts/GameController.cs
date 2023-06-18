@@ -1,12 +1,14 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] GameObject m_timerText;
     [SerializeField] GameObject m_pauseText;
     [SerializeField] GameObject m_gameOverText;
     [SerializeField] GameObject m_clearText;
@@ -19,7 +21,12 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject m_blackCurtainDown;
     GameObject m_player;
     CinemachineVirtualCamera m_virtualCamera;
+    AudioSource[] m_audioSource;
+    float m_defaultVolume;
+    TextMeshProUGUI m_timerTextText;
 
+    string m_timerMin;
+    string m_timerSec;
     bool m_gameClear;
     float m_gameTimer;
     float m_clearTime;
@@ -29,10 +36,18 @@ public class GameController : MonoBehaviour
     {
         m_player = GameObject.Find("Player");
         m_virtualCamera = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        m_audioSource = GetComponents<AudioSource>();
+        m_defaultVolume = m_audioSource[0].volume;
+        m_timerTextText = m_timerText.GetComponent<TextMeshProUGUI>();
     }
     private void Update()
     {
         m_gameTimer += Time.deltaTime;
+        m_timerMin = ((int)m_gameTimer / 60).ToString();
+        if (m_timerMin.Length < 2) { m_timerMin = "0" + m_timerMin; }
+        m_timerSec = ((int)m_gameTimer % 60).ToString();
+        if (m_timerSec.Length < 2) { m_timerSec = "0" + m_timerSec; }
+        m_timerTextText.text = $"{m_timerMin}:{m_timerSec}";
         if (Input.GetButtonDown("Cancel"))
         {
             Time.timeScale = 0;
@@ -67,6 +82,11 @@ public class GameController : MonoBehaviour
                 m_deathCountText.SetActive(true);
                 m_deathCountText.GetComponent<Text>().text = $"死んだ回数　{m_deathCount}回";
                 m_fromTheBeginningButton.SetActive(true);
+                m_audioSource[1].Play();
+            }
+            if (m_audioSource[0].volume > 0)
+            {
+                m_audioSource[0].volume -= m_defaultVolume * Time.deltaTime / 1.8f;//1.8秒でフェードアウト
             }
         }
     }
