@@ -20,7 +20,7 @@ public class TitleSceneController : MonoBehaviour
     {
         m_instructionsCanvas.SetActive(false);
         m_panelRectTransform = m_instructionsPanel.GetComponent<RectTransform>();
-        m_panelRectTransform.localScale = new Vector3(0.7f, 0, 1);
+        m_panelRectTransform.localScale = new Vector3(0.8f, 0, 1);
     }
     void Update()
     {
@@ -52,25 +52,25 @@ public class TitleSceneController : MonoBehaviour
         if (m_InstructionsActive > 0)
         {
             m_panelScaleY = m_panelRectTransform.localScale.y;
-            m_panelScaleY += 0.65f * Time.deltaTime;
-            if (m_panelScaleY > 0.65f)
+            m_panelScaleY += 0.8f * Time.deltaTime;
+            if (m_panelScaleY > 0.8f)
             {
-                m_panelScaleY = 0.65f;
+                m_panelScaleY = 0.8f;
             }
-            m_panelRectTransform.localScale = new Vector3(0.7f, m_panelScaleY, 1);
+            m_panelRectTransform.localScale = new Vector3(0.8f, m_panelScaleY, 1);
         }
         else
         {
             m_instructionsCanvas.SetActive(false);
             m_panelScaleY = m_panelRectTransform.localScale.y;
-            m_panelScaleY -= 0.65f * Time.deltaTime;
+            m_panelScaleY -= 0.8f * Time.deltaTime;
             if (m_panelScaleY < 0)
             {
                 m_panelScaleY = 0;
             }
-            m_panelRectTransform.localScale = new Vector3(0.7f, m_panelScaleY, 1);
+            m_panelRectTransform.localScale = new Vector3(0.8f, m_panelScaleY, 1);
         }
-        if (m_panelScaleY >= 0.65f)
+        if (m_panelScaleY >= 0.8f)
         {
             m_instructionsCanvas.SetActive(true);
         }
